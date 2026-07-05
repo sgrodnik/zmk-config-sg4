@@ -1,0 +1,6 @@
+if SHIELD_SG4
+
+config ZMK_KEYBOARD_NAME
+    default "sg4"
+
+endif
