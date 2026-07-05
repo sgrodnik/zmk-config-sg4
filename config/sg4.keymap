@@ -42,7 +42,7 @@
 &kp GRAVE           &kp F1    &kp F2    &kp F3    &kp F4    &kp F5    &kp F6    &kp F7    &kp F8    &kp F9    &kp F10   &kp F11   &kp F12   &kp DEL
 &trans              &mtHOME   &kp UP    &mtEND    &trans    &trans    &trans    &trans    &trans    &trans    &kp PSCRN &trans    &trans    &bootloader
 &trans              &kp LEFT  &kp DOWN  &kp RIGHT &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
-&trans    &kp V_DN  &kp V_UP  &kp PLAY  &kp NEXT  &trans    &trans    &trans    &trans    &trans    &trans    &trans                        &trans
+&trans    &trans    &kp V_DN  &kp V_UP  &kp PLAY  &kp NEXT  &trans    &trans    &trans    &trans    &trans    &trans                        &trans
 &trans    &trans    &trans                                  &trans                                  &trans    &trans    &trans              &trans
             >;
         };
@@ -52,7 +52,7 @@
 &trans              &kp bt1   &kp bt2   &kp bt3   &kp bt4   &kp bt5   &kp bt6   &kp bt7   &kp bt8   &kp bt0   &kp btc   &trans    &trans    &trans
 &trans              &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
 &trans              &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
-&trans    &kp B_DN  &kp B_UP  &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans                        &trans
+&trans    &trans    &kp B_DN  &kp B_UP  &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans                        &trans
 &trans    &trans    &trans                                  &trans                                  &trans    &trans    &trans              &trans
             >;
         };
