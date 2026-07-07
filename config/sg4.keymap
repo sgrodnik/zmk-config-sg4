@@ -23,7 +23,104 @@
 #define PLAY    C_PLAY_PAUSE
 #define NEXT    C_NEXT
 
+#define homeA   hm LGUI   A
+#define homeS   hm LALT   S
+#define homeD   hm LSHIFT D
+#define homeF   hm LCTRL  F
+#define homeJ   hm RCTRL  J
+#define homeK   hm RSHIFT K
+
 / {
+macros {
+        ZMK_MACRO(task_manager, wait-ms = <30>; tap-ms = <40>; bindings
+            = <&macro_press   &kp LCTRL &kp LSHIFT>
+            , <&macro_tap     &kp ESC>
+            , <&macro_release &kp LSHIFT &kp LCTRL>
+            ;
+        )
+
+        ZMK_MACRO(m_al_tab, wait-ms = <30>; tap-ms = <40>; bindings
+            = <&macro_press   &kp LALT>
+            , <&macro_tap     &kp TAB>
+            , <&macro_pause_for_release>
+            , <&macro_release &kp LALT>
+            ;
+        )
+
+        ZMK_MACRO(m_ct_tab, wait-ms = <30>; tap-ms = <40>; bindings
+            = <&macro_press   &kp LCTRL>
+            , <&macro_tap     &kp TAB>
+            , <&macro_pause_for_release>
+            , <&macro_release &kp LCTRL>
+            ;
+        )
+
+        #define short_m wait-ms = <20>; tap-ms = <20>; bindings =
+
+        ZMK_MACRO(m_copy_all,   short_m <&macro_tap &kp LC(HOME) &kp LC(LS(END)) &kp LC(INS) &kp LC(C)                        > ; )
+        ZMK_MACRO(m_paste_all,  short_m <&macro_tap &kp LC(HOME) &kp LC(LS(END)) &kp LS(INS)                                  > ; )
+        ZMK_MACRO(m_cut_all,    short_m <&macro_tap &kp LC(HOME) &kp LC(LS(END)) &kp LS(DEL)                                  > ; )
+        ZMK_MACRO(m_copy,       short_m <&macro_tap &kp LC(INS) &kp LC(C)                                                     > ; )
+        ZMK_MACRO(m_paste,      short_m <&macro_tap &kp LS(INS)                                                               > ; )
+        ZMK_MACRO(m_cut,        short_m <&macro_tap &kp LS(DEL)                                                               > ; )
+        ZMK_MACRO(m_backsp,     short_m <&macro_tap &kp BSPC                                                                  > ; )
+        ZMK_MACRO(m_del_line,   short_m <&macro_tap &kp HOME &kp HOME &kp LS(END) &kp LS(RIGHT) &kp DEL                       > ; )
+        ZMK_MACRO(m_undo,       short_m <&macro_tap &kp LC(Z)                                                                 > ; )
+        ZMK_MACRO(m_redo,       short_m <&macro_tap &kp LC(LS(Z))                                                             > ; )
+        ZMK_MACRO(m_clip_man,   short_m <&macro_tap &kp LG(V)                                                                 > ; )
+        ZMK_MACRO(m_clip_prev,  short_m <&macro_tap &kp LG(V)>, <&macro_wait_time 200>, <&macro_tap &kp DOWN &kp DOWN &kp RET > ; )
+        ZMK_MACRO(m_ret,        short_m <&macro_tap &kp RET                                                                   > ; )
+        ZMK_MACRO(m_c_ret,      short_m <&macro_tap &kp LC(RET)                                                               > ; )
+    };
+
+    behaviors {
+        hm: homerow_mods {  // allows repeating z
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            require-prior-idle-ms = <75>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+            // retro-tap;
+        };
+
+        #define short_ht compatible = "zmk,behavior-hold-tap"; #binding-cells = <2>; flavor = "tap-preferred"; tapping-term-ms = <200>; quick-tap-ms = <0>;
+
+        ht_c_ret:         hold_tap_ctrl_ret      { short_ht bindings = <&m_c_ret>,     <&m_ret>; };
+        ht_copy_all:      hold_tap_copy_all      { short_ht bindings = <&m_copy_all>,  <&m_copy>; };
+        ht_paste_all:     hold_tap_paste_all     { short_ht bindings = <&m_paste_all>, <&m_paste>; };
+        ht_cut_all:       hold_tap_cut_all       { short_ht bindings = <&m_cut_all>,   <&m_cut>; };
+        ht_backsp_line:   hold_tap_backsp_line   { short_ht bindings = <&m_del_line>,  <&m_backsp>; };
+        ht_clip_man:      hold_tap_clip_man_prev { short_ht bindings = <&m_clip_prev>, <&m_clip_man>; };
+        ht_undo_redo:     hold_tap_undo_redo     { short_ht bindings = <&m_redo>,      <&m_undo>; };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+        combo_del      { key-positions = <16 17   >; bindings = <&kp DEL      >; layers = <0  >; };  // WE
+        combo_esc      { key-positions = <30 32   >; bindings = <&kp ESC      >; layers = <0  >; };  // SF
+        combo_ret      { key-positions = <31 32   >; bindings = <&ht_c_ret 0 0>; layers = <0  >; };  // DF
+        combo_task     { key-positions = <15 16   >; bindings = <&task_manager>; layers = <0  >; };  // QW
+        combo_cshf     { key-positions = <43 32   >; bindings = <&sk LS(LCTRL)>; layers = <0  >; };  // ZF
+        combo_capsw    { key-positions = <29 43   >; bindings = <&caps_word   >; layers = <0  >; };  // AZ
+        combo_capsw2   { key-positions = <31 36   >; bindings = <&caps_word   >; layers = <0  >; };  // DK
+// 00esc               01n1      02n2      03n3      04n4      05n5      06n6      07n7      08n8      09n9      10n0      11minus   12equal   13bspc
+// 14tab               15q       16w       17e       18r       19t       20y       21u       22i       23o       24p       25lbkt    26rbkt    27ret
+// 28clck              29a       30s       31d       32f       33g       34h       35j       36k       37l       38semi    39sqt     40bslh
+// 41lsft    42lsft    43z       44x       45c       46v       47b       48n       49m       50comma   51dot     52fslh                        53rsft
+// 54lctl    55lgui    56lalt                                  57space                                 58left    59down    60right             61mo2
+        combo_repeat   { key-positions = <17 18   >; bindings = <&key_repeat >;          layers = <0>; };  // ER
+        combo_al_tab   { key-positions = <30 57   >; bindings = <&m_al_tab >;            layers = <0>; slow-release; };  // Stab
+        combo_ct_tab   { key-positions = <32 57   >; bindings = <&m_ct_tab >;            layers = <0>; slow-release; };  // Ftab
+        combo_copy_all { key-positions = <44 45   >; bindings = <&ht_copy_all 0 0>;      layers = <0>; };  // XC
+        combo_paste_all{ key-positions = <45 46   >; bindings = <&ht_paste_all 0 0>;     layers = <0>; };  // CV
+        combo_cut_all  { key-positions = <43 44   >; bindings = <&ht_cut_all 0 0>;       layers = <0>; };  // ZX
+        combo_bsp_line { key-positions = <30 31   >; bindings = <&ht_backsp_line 0 0>;   layers = <0>; };  // SD
+        combo_clip_man { key-positions = <44 45 46>; bindings = <&ht_clip_man 0 0>;      layers = <0>; };  // XCV
+        combo_undo     { key-positions = <29 30   >; bindings = <&ht_undo_redo 0 0>;     layers = <0>; };  // AS
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -31,7 +128,7 @@
             bindings = <
 &kp ESC             &kp N1    &kp N2    &kp N3    &kp N4    &kp N5    &kp N6    &kp N7    &kp N8    &kp N9    &kp N0    &kp MINUS &kp EQUAL &kp BSPC
 &kp TAB             &kp Q     &kp W     &kp E     &kp R     &kp T     &kp Y     &kp U     &kp I     &kp O     &kp P     &kp LBKT  &kp RBKT  &kp RET
-&kp CLCK            &kp A     &kp S     &kp D     &kp F     &kp G     &kp H     &kp J     &kp K     &kp L     &kp SEMI  &kp SQT   &kp BSLH
+&kp CLCK            &homeA    &homeS    &homeD    &homeF    &kp G     &kp H     &homeJ    &homeK    &kp L     &kp SEMI  &kp SQT   &kp BSLH
 &kp LSFT  &kp LSFT  &kp Z     &kp X     &kp C     &kp V     &kp B     &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH                      &kp RSFT
 &kp LCTL  &kp LGUI  &kp LALT                                &lt 1 SPACE                             &kp LEFT  &kp DOWN  &kp RIGHT           &mo 2
             >;
@@ -53,6 +150,16 @@
 &trans              &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
 &trans              &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
 &trans    &trans    &kp B_DN  &kp B_UP  &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans                        &trans
+&trans    &trans    &trans                                  &trans                                  &trans    &trans    &trans              &trans
+            >;
+        };
+
+        layerTemplate {
+            bindings = <
+&trans              &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+&trans              &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+&trans              &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+&trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans                        &trans
 &trans    &trans    &trans                                  &trans                                  &trans    &trans    &trans              &trans
             >;
         };
